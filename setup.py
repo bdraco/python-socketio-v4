@@ -1,5 +1,5 @@
 """
-python-socketio
+python-socketio-v4
 ---------------
 
 Socket.IO server.
@@ -8,7 +8,7 @@ import re
 import sys
 from setuptools import setup
 
-with open('socketio/__init__.py', 'r') as f:
+with open('socketio_v4/__init__.py', 'r') as f:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
                         f.read(), re.MULTILINE).group(1)
 
@@ -16,21 +16,21 @@ with open('README.rst', 'r') as f:
     long_description = f.read()
 
 setup(
-    name='python-socketio',
+    name='python-socketio-v4',
     version=version,
-    url='http://github.com/miguelgrinberg/python-socketio/',
+    url='http://github.com/bdraco/python-socketio-v4/',
     license='MIT',
     author='Miguel Grinberg',
     author_email='miguelgrinberg50@gmail.com',
     description='Socket.IO server',
     long_description=long_description,
-    packages=['socketio'],
+    packages=['socketio_v4'],
     zip_safe=False,
     include_package_data=True,
     platforms='any',
     install_requires=[
         'six>=1.9.0',
-        'python-engineio>=3.13.0,<4'
+        'python-engineio-v3>=3.13.0,<4'
     ],
     extras_require={
         'client': [

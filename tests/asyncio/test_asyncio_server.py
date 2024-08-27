@@ -11,11 +11,11 @@ if six.PY3:
 else:
     import mock
 
-from socketio import asyncio_server
-from socketio import asyncio_namespace
-from socketio import exceptions
-from socketio import namespace
-from socketio import packet
+from socketio_v4 import asyncio_server
+from socketio_v4 import asyncio_namespace
+from socketio_v4 import exceptions
+from socketio_v4 import namespace
+from socketio_v4 import packet
 import pytest
 
 
@@ -36,7 +36,7 @@ def _run(coro):
 
 
 @unittest.skipIf(sys.version_info < (3, 5), 'only for Python 3.5+')
-@mock.patch('socketio.server.engineio.AsyncServer')
+@mock.patch('socketio_v4.server.engineio_v3.AsyncServer')
 class TestAsyncServer(unittest.TestCase):
     def tearDown(self):
         # restore JSON encoder, in case a test changed it
@@ -885,8 +885,8 @@ class TestAsyncServer(unittest.TestCase):
         s = asyncio_server.AsyncServer(logger='foo')
         assert s.logger == 'foo'
 
-    def test_engineio_logger(self, eio):
-        asyncio_server.AsyncServer(engineio_logger='foo')
+    def test_engineio_v3_logger(self, eio):
+        asyncio_server.AsyncServer(engineio_v3_logger='foo')
         eio.assert_called_once_with(
             **{'logger': 'foo', 'async_handlers': False}
         )

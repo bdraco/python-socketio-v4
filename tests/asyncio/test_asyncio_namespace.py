@@ -9,7 +9,7 @@ if six.PY3:
 else:
     import mock
 
-from socketio import asyncio_namespace
+from socketio_v4 import asyncio_namespace
 
 
 def AsyncMock(*args, **kwargs):

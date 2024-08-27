@@ -2,7 +2,7 @@ import unittest
 
 import six
 
-from socketio import packet
+from socketio_v4 import packet
 import pytest
 
 

@@ -6,7 +6,7 @@ if six.PY3:
 else:
     import mock
 
-from socketio import namespace
+from socketio_v4 import namespace
 
 
 class TestNamespace(unittest.TestCase):

@@ -3,9 +3,9 @@ import asyncio
 from sanic import Sanic
 from sanic.response import html
 
-import socketio
+import socketio_v4
 
-sio = socketio.AsyncServer(async_mode='sanic')
+sio = socketio_v4.AsyncServer(async_mode='sanic')
 app = Sanic()
 sio.attach(app)
 

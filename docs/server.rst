@@ -3,9 +3,9 @@ The Socket.IO Server
 
 This package contains two Socket.IO servers:
 
-- The :func:`socketio.Server` class creates a server compatible with the
+- The :func:`socketio_v4.Server` class creates a server compatible with the
   Python standard library.
-- The :func:`socketio.AsyncServer` class creates a server compatible with
+- The :func:`socketio_v4.AsyncServer` class creates a server compatible with
   the ``asyncio`` package.
 
 The methods in the two servers are the same, with the only difference that in
@@ -17,7 +17,7 @@ Installation
 To install the Socket.IO server along with its dependencies, use the following
 command::
 
-    pip install python-socketio
+    pip install python-socketio_v4
 
 In addition to the server, you will need to select an asynchronous framework
 or server to use along with it. The list of supported packages is covered
@@ -26,35 +26,35 @@ in the :ref:`deployment-strategies` section.
 Creating a Server Instance
 --------------------------
 
-A Socket.IO server is an instance of class :class:`socketio.Server`. This
+A Socket.IO server is an instance of class :class:`socketio_v4.Server`. This
 instance can be transformed into a standard WSGI application by wrapping it
-with the :class:`socketio.WSGIApp` class::
+with the :class:`socketio_v4.WSGIApp` class::
 
-   import socketio
+   import socketio_v4
 
    # create a Socket.IO server
-   sio = socketio.Server()
+   sio = socketio_v4.Server()
 
    # wrap with a WSGI application
-   app = socketio.WSGIApp(sio)
+   app = socketio_v4.WSGIApp(sio)
 
-For asyncio based servers, the :class:`socketio.AsyncServer` class provides
+For asyncio based servers, the :class:`socketio_v4.AsyncServer` class provides
 the same functionality, but in a coroutine friendly format. If desired, The
-:class:`socketio.ASGIApp` class can transform the server into a standard
+:class:`socketio_v4.ASGIApp` class can transform the server into a standard
 ASGI application::
 
     # create a Socket.IO server
-    sio = socketio.AsyncServer()
+    sio = socketio_v4.AsyncServer()
 
     # wrap with ASGI application
-    app = socketio.ASGIApp(sio)
+    app = socketio_v4.ASGIApp(sio)
 
 These two wrappers can also act as middlewares, forwarding any traffic that is
 not intended to the Socket.IO server to another application. This allows
 Socket.IO servers to integrate easily into existing WSGI or ASGI applications::
 
    from wsgi import app  # a Flask, Django, etc. application
-   app = socketio.WSGIApp(sio, app)
+   app = socketio_v4.WSGIApp(sio, app)
 
 Serving Static Files
 --------------------
@@ -125,15 +125,15 @@ specified if needed::
     }
 
 The static file configuration dictionary is given as the ``static_files``
-argument to the ``socketio.WSGIApp`` or ``socketio.ASGIApp`` classes::
+argument to the ``socketio_v4.WSGIApp`` or ``socketio_v4.ASGIApp`` classes::
 
     # for standard WSGI applications
-    sio = socketio.Server()
-    app = socketio.WSGIApp(sio, static_files=static_files)
+    sio = socketio_v4.Server()
+    app = socketio_v4.WSGIApp(sio, static_files=static_files)
 
     # for asyncio-based ASGI applications
-    sio = socketio.AsyncServer()
-    app = socketio.ASGIApp(sio, static_files=static_files)
+    sio = socketio_v4.AsyncServer()
+    app = socketio_v4.ASGIApp(sio, static_files=static_files)
 
 The routing precedence in these two classes is as follows:
 
@@ -153,7 +153,7 @@ Defining Event Handlers
 The Socket.IO protocol is event based. When a client wants to communicate with
 the server it *emits* an event. Each event has a name, and a list of
 arguments. The server registers event handler functions with the
-:func:`socketio.Server.event` or :func:`socketio.Server.on` decorators::
+:func:`socketio_v4.Server.event` or :func:`socketio_v4.Server.on` decorators::
 
     @sio.event
     def my_event(sid, data):
@@ -198,7 +198,7 @@ headers. After inspecting the request, the connect event handler can return
 
 Sometimes it is useful to pass data back to the client being rejected. In that
 case instead of returning ``False``
-:class:`socketio.exceptions.ConnectionRefusedError` can be raised, and all of
+:class:`socketio_v4.exceptions.ConnectionRefusedError` can be raised, and all of
 its arguments will be sent to the client with the rejection message::
 
     @sio.event
@@ -209,7 +209,7 @@ Emitting Events
 ---------------
 
 Socket.IO is a bidirectional protocol, so at any time the server can send an
-event to its connected clients. The :func:`socketio.Server.emit` method is
+event to its connected clients. The :func:`socketio_v4.Server.emit` method is
 used for this task::
 
    sio.emit('my event', {'data': 'foobar'})
@@ -219,7 +219,7 @@ This can be achieved by adding a ``room`` argument to the emit call::
 
    sio.emit('my event', {'data': 'foobar'}, room=user_sid)
 
-The :func:`socketio.Server.emit` method takes an event name, a message payload
+The :func:`socketio_v4.Server.emit` method takes an event name, a message payload
 of type ``str``, ``bytes``, ``list``, ``dict`` or ``tuple``, and the recipient
 room. When sending a ``tuple``, the elements in it need to be of any of the
 other four allowed types. The elements of the tuple will be passed as multiple
@@ -243,7 +243,7 @@ function, simply by returning them from the handler function::
         return "OK", 123
 
 Likewise, the server can request a callback function to be invoked after a
-client has processed an event. The :func:`socketio.Server.emit` method has an
+client has processed an event. The :func:`socketio_v4.Server.emit` method has an
 optional ``callback`` argument that can be set to a callable. If this
 argument is given, the callable will be invoked after the client has processed
 the event, and any values returned by the client will be passed as arguments
@@ -265,7 +265,7 @@ Each namespace is handled independently from the others, with separate session
 IDs (``sid``\ s), event handlers and rooms. It is important that applications
 that use multiple namespaces specify the correct namespace when setting up
 their event handlers and rooms, using the optional ``namespace`` argument
-available in all the methods in the :class:`socketio.Server` class::
+available in all the methods in the :class:`socketio_v4.Server` class::
 
     @sio.event(namespace='/chat')
     def my_custom_event(sid, data):
@@ -284,9 +284,9 @@ Class-Based Namespaces
 
 As an alternative to the decorator-based event handlers, the event handlers
 that belong to a namespace can be created as methods of a subclass of
-:class:`socketio.Namespace`::
+:class:`socketio_v4.Namespace`::
 
-    class MyCustomNamespace(socketio.Namespace):
+    class MyCustomNamespace(socketio_v4.Namespace):
         def on_connect(self, sid, environ):
             pass
 
@@ -299,10 +299,10 @@ that belong to a namespace can be created as methods of a subclass of
     sio.register_namespace(MyCustomNamespace('/test'))
 
 For asyncio based severs, namespaces must inherit from
-:class:`socketio.AsyncNamespace`, and can define event handlers as coroutines
+:class:`socketio_v4.AsyncNamespace`, and can define event handlers as coroutines
 if desired::
 
-    class MyCustomNamespace(socketio.AsyncNamespace):
+    class MyCustomNamespace(socketio_v4.AsyncNamespace):
         def on_connect(self, sid, environ):
             pass
 
@@ -323,7 +323,7 @@ class-based namespaces must use characters that are legal in method names.
 
 As a convenience to methods defined in a class-based namespace, the namespace
 instance includes versions of several of the methods in the
-:class:`socketio.Server` and :class:`socketio.AsyncServer` classes that default
+:class:`socketio_v4.Server` and :class:`socketio_v4.AsyncServer` classes that default
 to the proper namespace when the ``namespace`` argument is not given.
 
 In the case that an event has a handler in a class-based namespace, and also a
@@ -343,12 +343,12 @@ the application can put its clients into "rooms", and then address messages to
 these rooms.
 
 In the previous section the ``room`` argument of the
-:func:`socketio.SocketIO.emit` method was used to designate a specific
+:func:`socketio_v4.SocketIO.emit` method was used to designate a specific
 client as the recipient of the event. This is because upon connection, a
 personal room for each client is created and named with the ``sid`` assigned
 to the connection. The application is then free to create additional rooms and
-manage which clients are in them using the :func:`socketio.Server.enter_room`
-and :func:`socketio.Server.leave_room` methods. Clients can be in as many
+manage which clients are in them using the :func:`socketio_v4.Server.enter_room`
+and :func:`socketio_v4.Server.leave_room` methods. Clients can be in as many
 rooms as needed and can be moved between rooms as often as necessary.
 
 ::
@@ -363,7 +363,7 @@ rooms as needed and can be moved between rooms as often as necessary.
 
 In chat applications it is often desired that an event is broadcasted to all
 the members of the room except one, which is the originator of the event such
-as a chat message. The :func:`socketio.Server.emit` method provides an
+as a chat message. The :func:`socketio_v4.Server.emit` method provides an
 optional ``skip_sid`` argument to indicate a client that should be skipped
 during the broadcast.
 
@@ -466,23 +466,23 @@ Redis
 
 To use a Redis message queue, a Python Redis client must be installed::
 
-    # socketio.Server class
+    # socketio_v4.Server class
     pip install redis
 
-    # socketio.AsyncServer class
+    # socketio_v4.AsyncServer class
     pip install aioredis
 
-The Redis queue is configured through the :class:`socketio.RedisManager` and
-:class:`socketio.AsyncRedisManager` classes. These classes connect directly to
+The Redis queue is configured through the :class:`socketio_v4.RedisManager` and
+:class:`socketio_v4.AsyncRedisManager` classes. These classes connect directly to
 the Redis store and use the queue's pub/sub functionality::
 
-    # socketio.Server class
-    mgr = socketio.RedisManager('redis://')
-    sio = socketio.Server(client_manager=mgr)
+    # socketio_v4.Server class
+    mgr = socketio_v4.RedisManager('redis://')
+    sio = socketio_v4.Server(client_manager=mgr)
 
-    # socketio.AsyncServer class
-    mgr = socketio.AsyncRedisManager('redis://')
-    sio = socketio.AsyncServer(client_manager=mgr)
+    # socketio_v4.AsyncServer class
+    mgr = socketio_v4.AsyncRedisManager('redis://')
+    sio = socketio_v4.AsyncServer(client_manager=mgr)
 
 The ``client_manager`` argument instructs the server to connect to the given
 message queue, and to coordinate with other processes connected to the queue.
@@ -503,10 +503,10 @@ package for Redis needs to be installed as well::
 
     pip install redis
 
-The queue is configured through the :class:`socketio.KombuManager`::
+The queue is configured through the :class:`socketio_v4.KombuManager`::
 
-    mgr = socketio.KombuManager('amqp://')
-    sio = socketio.Server(client_manager=mgr)
+    mgr = socketio_v4.KombuManager('amqp://')
+    sio = socketio_v4.Server(client_manager=mgr)
 
 The connection URL passed to the :class:`KombuManager` constructor is passed
 directly to Kombu's `Connection object
@@ -515,7 +515,7 @@ the Kombu documentation should be consulted for information on how to build
 the correct URL for a given message queue.
 
 Note that Kombu currently does not support asyncio, so it cannot be used with
-the :class:`socketio.AsyncServer` class.
+the :class:`socketio_v4.AsyncServer` class.
 
 Kafka
 ~~~~~
@@ -526,14 +526,14 @@ package::
 
     pip install kafka-python
 
-Access to Kafka is configured through the :class:`socketio.KafkaManager`
+Access to Kafka is configured through the :class:`socketio_v4.KafkaManager`
 class::
 
-    mgr = socketio.KafkaManager('kafka://')
-    sio = socketio.Server(client_manager=mgr)
+    mgr = socketio_v4.KafkaManager('kafka://')
+    sio = socketio_v4.Server(client_manager=mgr)
 
 Note that Kafka currently does not support asyncio, so it cannot be used with
-the :class:`socketio.AsyncServer` class.
+the :class:`socketio_v4.AsyncServer` class.
 
 AioPika
 ~~~~~~~
@@ -545,10 +545,10 @@ You need to install aio_pika with pip::
     pip install aio_pika
 
 The RabbitMQ queue is configured through the
-:class:`socketio.AsyncAioPikaManager` class::
+:class:`socketio_v4.AsyncAioPikaManager` class::
 
-    mgr = socketio.AsyncAioPikaManager('amqp://')
-    sio = socketio.AsyncServer(client_manager=mgr)
+    mgr = socketio_v4.AsyncAioPikaManager('amqp://')
+    sio = socketio_v4.AsyncServer(client_manager=mgr)
 
 Emitting from external processes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -560,7 +560,7 @@ creation of a listening thread, which only makes sense in a server. For
 example::
 
     # connect to the redis queue as an external process
-    external_sio = socketio.RedisManager('redis://', write_only=True)
+    external_sio = socketio_v4.RedisManager('redis://', write_only=True)
 
     # emit an event
     external_sio.emit('my event', data={'foo': 'bar'}, room='my room')
@@ -571,16 +571,16 @@ Debugging and Troubleshooting
 To help you debug issues, the server can be configured to output logs to the
 terminal::
 
-    import socketio
+    import socketio_v4
 
     # standard Python
-    sio = socketio.Server(logger=True, engineio_logger=True)
+    sio = socketio_v4.Server(logger=True, engineio_v3_logger=True)
 
     # asyncio
-    sio = socketio.AsyncServer(logger=True, engineio_logger=True)
+    sio = socketio_v4.AsyncServer(logger=True, engineio_v3_logger=True)
 
 The ``logger`` argument controls logging related to the Socket.IO protocol,
-while ``engineio_logger`` controls logs that originate in the low-level
+while ``engineio_v3_logger`` controls logs that originate in the low-level
 Engine.IO transport. These arguments can be set to ``True`` to output logs to
 ``stderr``, or to an object compatible with Python's ``logging`` package
 where the logs should be emitted to. A value of ``False`` disables logging.
@@ -603,11 +603,11 @@ Aiohttp
 and WebSocket, based on asyncio. Support for this framework is limited to Python
 3.5 and newer.
 
-Instances of class ``socketio.AsyncServer`` will automatically use aiohttp
+Instances of class ``socketio_v4.AsyncServer`` will automatically use aiohttp
 for asynchronous operations if the library is installed. To request its use
 explicitly, the ``async_mode`` option can be given in the constructor::
 
-    sio = socketio.AsyncServer(async_mode='aiohttp')
+    sio = socketio_v4.AsyncServer(async_mode='aiohttp')
 
 A server configured for aiohttp must be attached to an existing application::
 
@@ -631,18 +631,18 @@ for HTTP and WebSocket. Support for this framework requires Python 3.5 and
 newer. Only Tornado version 5 and newer are supported, thanks to its tight
 integration with asyncio.
 
-Instances of class ``socketio.AsyncServer`` will automatically use tornado
+Instances of class ``socketio_v4.AsyncServer`` will automatically use tornado
 for asynchronous operations if the library is installed. To request its use
 explicitly, the ``async_mode`` option can be given in the constructor::
 
-    sio = socketio.AsyncServer(async_mode='tornado')
+    sio = socketio_v4.AsyncServer(async_mode='tornado')
 
 A server configured for tornado must include a request handler for
 Socket.IO::
 
     app = tornado.web.Application(
         [
-            (r"/socket.io/", socketio.get_tornado_handler(sio)),
+            (r"/socket.io/", socketio_v4.get_tornado_handler(sio)),
         ],
         # ... other application options
     )
@@ -662,11 +662,11 @@ Sanic
 `Sanic <http://sanic.readthedocs.io/>`_ is a very efficient asynchronous web
 server for Python 3.5 and newer.
 
-Instances of class ``socketio.AsyncServer`` will automatically use Sanic for
+Instances of class ``socketio_v4.AsyncServer`` will automatically use Sanic for
 asynchronous operations if the framework is installed. To request its use
 explicitly, the ``async_mode`` option can be given in the constructor::
 
-    sio = socketio.AsyncServer(async_mode='sanic')
+    sio = socketio_v4.AsyncServer(async_mode='sanic')
 
 A server configured for aiohttp must be attached to an existing application::
 
@@ -687,7 +687,7 @@ It has been reported that the CORS support provided by the Sanic extension
 this package's own support for this protocol. To disable CORS support in this
 package and let Sanic take full control, initialize the server as follows::
 
-    sio = socketio.AsyncServer(async_mode='sanic', cors_allowed_origins=[])
+    sio = socketio_v4.AsyncServer(async_mode='sanic', cors_allowed_origins=[])
 
 On the Sanic side you will need to enable the `CORS_SUPPORTS_CREDENTIALS`
 setting in addition to any other configuration that you use::
@@ -697,11 +697,11 @@ setting in addition to any other configuration that you use::
 Uvicorn, Daphne, and other ASGI servers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The ``socketio.ASGIApp`` class is an ASGI compatible application that can
-forward Socket.IO traffic to an ``socketio.AsyncServer`` instance::
+The ``socketio_v4.ASGIApp`` class is an ASGI compatible application that can
+forward Socket.IO traffic to an ``socketio_v4.AsyncServer`` instance::
 
-   sio = socketio.AsyncServer(async_mode='asgi')
-   app = socketio.ASGIApp(sio)
+   sio = socketio_v4.AsyncServer(async_mode='asgi')
+   app = socketio_v4.ASGIApp(sio)
 
 The application can then be deployed with any ASGI compatible web server.
 
@@ -714,16 +714,16 @@ the same style used with the blocking standard library functions. An Socket.IO
 server deployed with eventlet has access to the long-polling and WebSocket
 transports.
 
-Instances of class ``socketio.Server`` will automatically use eventlet for
+Instances of class ``socketio_v4.Server`` will automatically use eventlet for
 asynchronous operations if the library is installed. To request its use
 explicitly, the ``async_mode`` option can be given in the constructor::
 
-    sio = socketio.Server(async_mode='eventlet')
+    sio = socketio_v4.Server(async_mode='eventlet')
 
 A server configured for eventlet is deployed as a regular WSGI application
-using the provided ``socketio.WSGIApp``::
+using the provided ``socketio_v4.WSGIApp``::
 
-    app = socketio.WSGIApp(sio)
+    app = socketio_v4.WSGIApp(sio)
     import eventlet
     eventlet.wsgi.server(eventlet.listen(('', 8000)), app)
 
@@ -743,7 +743,7 @@ clients, each handled by a greenlet.
 
 Eventlet provides a ``monkey_patch()`` function that replaces all the blocking
 functions in the standard library with equivalent asynchronous versions. While
-python-socketio does not require monkey patching, other libraries such as
+python-socketio_v4 does not require monkey patching, other libraries such as
 database drivers are likely to require it.
 
 Gevent
@@ -755,17 +755,17 @@ gevent has access to the long-polling transport. If project
 `gevent-websocket <https://bitbucket.org/Jeffrey/gevent-websocket/>`_ is
 installed, the WebSocket transport is also available.
 
-Instances of class ``socketio.Server`` will automatically use gevent for
+Instances of class ``socketio_v4.Server`` will automatically use gevent for
 asynchronous operations if the library is installed and eventlet is not
 installed. To request gevent to be selected explicitly, the ``async_mode``
 option can be given in the constructor::
 
-    sio = socketio.Server(async_mode='gevent')
+    sio = socketio_v4.Server(async_mode='gevent')
 
 A server configured for gevent is deployed as a regular WSGI application
-using the provided ``socketio.WSGIApp``::
+using the provided ``socketio_v4.WSGIApp``::
 
-    app = socketio.WSGIApp(sio)
+    app = socketio_v4.WSGIApp(sio)
     from gevent import pywsgi
     pywsgi.WSGIServer(('', 8000), app).serve_forever()
 
@@ -774,7 +774,7 @@ follows::
 
     from gevent import pywsgi
     from geventwebsocket.handler import WebSocketHandler
-    app = socketio.WSGIApp(sio)
+    app = socketio_v4.WSGIApp(sio)
     pywsgi.WSGIServer(('', 8000), app,
                       handler_class=WebSocketHandler).serve_forever()
 
@@ -798,7 +798,7 @@ concurrent clients through the use of greenlets.
 
 Gevent provides a ``monkey_patch()`` function that replaces all the blocking
 functions in the standard library with equivalent asynchronous versions. While
-python-socketio does not require monkey patching, other libraries such as
+python-socketio_v4 does not require monkey patching, other libraries such as
 database drivers are likely to require it.
 
 uWSGI
@@ -807,13 +807,13 @@ uWSGI
 When using the uWSGI server in combination with gevent, the Socket.IO server
 can take advantage of uWSGI's native WebSocket support.
 
-Instances of class ``socketio.Server`` will automatically use this option for
+Instances of class ``socketio_v4.Server`` will automatically use this option for
 asynchronous operations if both gevent and uWSGI are installed and eventlet is
 not installed. To request this asynchronous mode explicitly, the
 ``async_mode`` option can be given in the constructor::
 
     # gevent with uWSGI
-    sio = socketio.Server(async_mode='gevent_uwsgi')
+    sio = socketio_v4.Server(async_mode='gevent_uwsgi')
 
 A complete explanation of the configuration and usage of the uWSGI server is
 beyond the scope of this documentation. The uWSGI server is a fairly complex
@@ -833,21 +833,21 @@ servers that use standard Python threads. This is an ideal setup to use with
 development servers such as `Werkzeug <http://werkzeug.pocoo.org>`_. Only the
 long-polling transport is currently available when using standard threads.
 
-Instances of class ``socketio.Server`` will automatically use the threading
+Instances of class ``socketio_v4.Server`` will automatically use the threading
 mode if neither eventlet nor gevent are not installed. To request the
 threading mode explicitly, the ``async_mode`` option can be given in the
 constructor::
 
-    sio = socketio.Server(async_mode='threading')
+    sio = socketio_v4.Server(async_mode='threading')
 
 A server configured for threading is deployed as a regular web application,
 using any WSGI complaint multi-threaded server. The example below deploys an
 Socket.IO application combined with a Flask web application, using Flask's
 development web server based on Werkzeug::
 
-    sio = socketio.Server(async_mode='threading')
+    sio = socketio_v4.Server(async_mode='threading')
     app = Flask(__name__)
-    app.wsgi_app = socketio.WSGIApp(sio, app.wsgi_app)
+    app.wsgi_app = socketio_v4.WSGIApp(sio, app.wsgi_app)
 
     # ... Socket.IO and Flask handler functions ...
 

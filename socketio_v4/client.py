@@ -4,14 +4,14 @@ import random
 import signal
 import threading
 
-import engineio
+import engineio_v3
 import six
 
 from . import exceptions
 from . import namespace
 from . import packet
 
-default_logger = logging.getLogger('socketio.client')
+default_logger = logging.getLogger('socketio_v4.client')
 reconnecting_clients = []
 
 
@@ -77,11 +77,11 @@ class Client(object):
                        skip SSL certificate verification, allowing
                        connections to servers with self signed certificates.
                        The default is ``True``.
-    :param engineio_logger: To enable Engine.IO logging set to ``True`` or pass
+    :param engineio_v3_logger: To enable Engine.IO logging set to ``True`` or pass
                             a logger object to use. To disable logging set to
                             ``False``. The default is ``False``. Note that
                             fatal errors are logged even when
-                            ``engineio_logger`` is ``False``.
+                            ``engineio_v3_logger`` is ``False``.
     """
     def __init__(self, reconnection=True, reconnection_attempts=0,
                  reconnection_delay=1, reconnection_delay_max=5,
@@ -99,15 +99,15 @@ class Client(object):
         self.randomization_factor = randomization_factor
         self.binary = binary
 
-        engineio_options = kwargs
-        engineio_logger = engineio_options.pop('engineio_logger', None)
-        if engineio_logger is not None:
-            engineio_options['logger'] = engineio_logger
+        engineio_v3_options = kwargs
+        engineio_v3_logger = engineio_v3_options.pop('engineio_v3_logger', None)
+        if engineio_v3_logger is not None:
+            engineio_v3_options['logger'] = engineio_v3_logger
         if json is not None:
             packet.Packet.json = json
-            engineio_options['json'] = json
+            engineio_v3_options['json'] = json
 
-        self.eio = self._engineio_client_class()(**engineio_options)
+        self.eio = self._engineio_v3_client_class()(**engineio_v3_options)
         self.eio.on('connect', self._handle_eio_connect)
         self.eio.on('message', self._handle_eio_message)
         self.eio.on('disconnect', self._handle_eio_disconnect)
@@ -128,7 +128,7 @@ class Client(object):
         self.connection_headers = None
         self.connection_transports = None
         self.connection_namespaces = None
-        self.socketio_path = None
+        self.socketio_v4_path = None
         self.sid = None
 
         self.connected = False
@@ -239,7 +239,7 @@ class Client(object):
             namespace_handler
 
     def connect(self, url, headers={}, transports=None,
-                namespaces=None, socketio_path='socket.io'):
+                namespaces=None, socketio_v4_path='socket.io'):
         """Connect to a Socket.IO server.
 
         :param url: The URL of the Socket.IO server. It can include custom
@@ -254,20 +254,20 @@ class Client(object):
                            addition to the default namespace. If not given,
                            the namespace list is obtained from the registered
                            event handlers.
-        :param socketio_path: The endpoint where the Socket.IO server is
+        :param socketio_v4_path: The endpoint where the Socket.IO server is
                               installed. The default value is appropriate for
                               most cases.
 
         Example usage::
 
-            sio = socketio.Client()
+            sio = socketio_v4.Client()
             sio.connect('http://localhost:5000')
         """
         self.connection_url = url
         self.connection_headers = headers
         self.connection_transports = transports
         self.connection_namespaces = namespaces
-        self.socketio_path = socketio_path
+        self.socketio_v4_path = socketio_v4_path
 
         if namespaces is None:
             namespaces = set(self.handlers.keys()).union(
@@ -278,8 +278,8 @@ class Client(object):
         self.namespaces = [n for n in namespaces if n != '/']
         try:
             self.eio.connect(url, headers=headers, transports=transports,
-                             engineio_path=socketio_path)
-        except engineio.exceptions.ConnectionError as exc:
+                             engineio_v3_path=socketio_v4_path)
+        except engineio_v3.exceptions.ConnectionError as exc:
             self._trigger_event(
                 'connect_error', '/',
                 exc.args[1] if len(exc.args) > 1 else exc.args[0])
@@ -582,7 +582,7 @@ class Client(object):
                              headers=self.connection_headers,
                              transports=self.connection_transports,
                              namespaces=self.connection_namespaces,
-                             socketio_path=self.socketio_path)
+                             socketio_v4_path=self.socketio_v4_path)
             except (exceptions.ConnectionError, ValueError):
                 pass
             else:
@@ -645,5 +645,5 @@ class Client(object):
             self._reconnect_task = self.start_background_task(
                 self._handle_reconnect)
 
-    def _engineio_client_class(self):
-        return engineio.Client
+    def _engineio_v3_client_class(self):
+        return engineio_v3.Client

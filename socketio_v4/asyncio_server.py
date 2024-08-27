@@ -1,6 +1,6 @@
 import asyncio
 
-import engineio
+import engineio_v3
 import six
 
 from . import asyncio_manager
@@ -63,10 +63,10 @@ class AsyncServer(server.Server):
                             inactive clients are closed. Set to ``False`` to
                             disable the monitoring task (not recommended). The
                             default is ``True``.
-    :param engineio_logger: To enable Engine.IO logging set to ``True`` or pass
+    :param engineio_v3_logger: To enable Engine.IO logging set to ``True`` or pass
                             a logger object to use. To disable logging set to
                             ``False``. Note that fatal errors are logged even
-                            when ``engineio_logger`` is ``False``.
+                            when ``engineio_v3_logger`` is ``False``.
     """
     def __init__(self, client_manager=None, logger=False, json=None,
                  async_handlers=True, **kwargs):
@@ -79,9 +79,9 @@ class AsyncServer(server.Server):
     def is_asyncio_based(self):
         return True
 
-    def attach(self, app, socketio_path='socket.io'):
+    def attach(self, app, socketio_v4_path='socket.io'):
         """Attach the Socket.IO server to an application."""
-        self.eio.attach(app, socketio_path)
+        self.eio.attach(app, socketio_v4_path)
 
     async def emit(self, event, data=None, to=None, room=None, skip_sid=None,
                    namespace=None, callback=None, **kwargs):
@@ -557,5 +557,5 @@ class AsyncServer(server.Server):
         if sid in self.environ:
             del self.environ[sid]
 
-    def _engineio_server_class(self):
-        return engineio.AsyncServer
+    def _engineio_v3_server_class(self):
+        return engineio_v3.AsyncServer

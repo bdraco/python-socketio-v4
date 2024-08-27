@@ -1,9 +1,9 @@
-.. python-socketio documentation master file, created by
+.. python-socketio_v4 documentation master file, created by
    sphinx-quickstart on Sun Nov 25 11:52:38 2018.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-python-socketio
+python-socketio_v4
 ===============
 
 This projects implements Socket.IO clients and servers that can run standalone

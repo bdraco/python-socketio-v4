@@ -9,6 +9,8 @@ python-socketio
 
 Python implementation of the `Socket.IO`_ realtime client and server.
 
+This is a release of 4.6.1 under the “socketio_v4” namespace for old systems.
+
 Resources
 ---------
 

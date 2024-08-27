@@ -21,7 +21,7 @@ class ZmqManager(PubSubManager):  # pragma: no cover
     follows::
 
         url = 'zmq+tcp://hostname:port1+port2'
-        server = socketio.Server(client_manager=socketio.ZmqManager(url))
+        server = socketio_v4.Server(client_manager=socketio_v4.ZmqManager(url))
 
     :param url: The connection URL for the zmq message broker,
                 which will need to be provided and running.
@@ -49,7 +49,7 @@ class ZmqManager(PubSubManager):  # pragma: no cover
     name = 'zmq'
 
     def __init__(self, url='zmq+tcp://localhost:5555+5556',
-                 channel='socketio',
+                 channel='socketio_v4',
                  write_only=False,
                  logger=None):
         if zmq is None:

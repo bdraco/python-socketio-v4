@@ -10,8 +10,8 @@ if six.PY3:
 else:
     import mock
 
-from socketio import asyncio_manager
-from socketio import asyncio_pubsub_manager
+from socketio_v4 import asyncio_manager
+from socketio_v4 import asyncio_pubsub_manager
 import pytest
 
 
@@ -44,7 +44,7 @@ class TestAsyncPubSubManager(unittest.TestCase):
         self.pm.initialize()
 
     def test_default_init(self):
-        assert self.pm.channel == 'socketio'
+        assert self.pm.channel == 'socketio_v4'
         self.pm.server.start_background_task.assert_called_once_with(
             self.pm._thread
         )
@@ -59,7 +59,7 @@ class TestAsyncPubSubManager(unittest.TestCase):
         pm = asyncio_pubsub_manager.AsyncPubSubManager(write_only=True)
         pm.set_server(mock_server)
         pm.initialize()
-        assert pm.channel == 'socketio'
+        assert pm.channel == 'socketio_v4'
         assert len(pm.host_id) == 32
         assert pm.server.start_background_task.call_count == 0
 

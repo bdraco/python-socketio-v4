@@ -19,7 +19,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'python-socketio'
+project = 'python-socketio_v4'
 copyright = '2018, Miguel Grinberg'
 author = 'Miguel Grinberg'
 
@@ -83,7 +83,7 @@ html_theme = 'alabaster'
 #
 html_theme_options = {
     'github_user': 'miguelgrinberg',
-    'github_repo': 'python-socketio',
+    'github_repo': 'python-socketio_v4',
     'github_banner': True,
     'github_button': True,
     'github_type': 'star',
@@ -110,7 +110,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'python-socketiodoc'
+htmlhelp_basename = 'python-socketio_v4doc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -137,7 +137,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'python-socketio.tex', 'python-socketio Documentation',
+    (master_doc, 'python-socketio_v4.tex', 'python-socketio_v4 Documentation',
      'Miguel Grinberg', 'manual'),
 ]
 
@@ -147,7 +147,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'python-socketio', 'python-socketio Documentation',
+    (master_doc, 'python-socketio_v4', 'python-socketio_v4 Documentation',
      [author], 1)
 ]
 
@@ -158,8 +158,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'python-socketio', 'python-socketio Documentation',
-     author, 'python-socketio', 'One line description of project.',
+    (master_doc, 'python-socketio_v4', 'python-socketio_v4 Documentation',
+     author, 'python-socketio_v4', 'One line description of project.',
      'Miscellaneous'),
 ]
 

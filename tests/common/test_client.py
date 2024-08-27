@@ -10,17 +10,17 @@ if six.PY3:
 else:
     import mock
 
-from engineio import exceptions as engineio_exceptions
-from engineio import packet as engineio_packet
+from engineio_v3 import exceptions as engineio_v3_exceptions
+from engineio_v3 import packet as engineio_v3_packet
 
 if six.PY3:
-    from socketio import asyncio_namespace
+    from socketio_v4 import asyncio_namespace
 else:
     asyncio_namespace = None
-from socketio import client
-from socketio import exceptions
-from socketio import namespace
-from socketio import packet
+from socketio_v4 import client
+from socketio_v4 import exceptions
+from socketio_v4 import namespace
+from socketio_v4 import packet
 import pytest
 
 
@@ -29,8 +29,8 @@ class TestClient(unittest.TestCase):
         c = client.Client()
         assert not c.is_asyncio_based()
 
-    @mock.patch('socketio.client.Client._engineio_client_class')
-    def test_create(self, engineio_client_class):
+    @mock.patch('socketio_v4.client.Client._engineio_v3_client_class')
+    def test_create(self, engineio_v3_client_class):
         c = client.Client(
             reconnection=False,
             reconnection_attempts=123,
@@ -46,12 +46,12 @@ class TestClient(unittest.TestCase):
         assert c.reconnection_delay_max == 10
         assert c.randomization_factor == 0.2
         assert c.binary
-        engineio_client_class().assert_called_once_with(foo='bar')
+        engineio_v3_client_class().assert_called_once_with(foo='bar')
         assert c.connection_url is None
         assert c.connection_headers is None
         assert c.connection_transports is None
         assert c.connection_namespaces is None
-        assert c.socketio_path is None
+        assert c.socketio_v4_path is None
         assert c.sid is None
 
         assert c.namespaces == []
@@ -64,10 +64,10 @@ class TestClient(unittest.TestCase):
     def test_custon_json(self):
         client.Client()
         assert packet.Packet.json == json
-        assert engineio_packet.Packet.json == json
+        assert engineio_v3_packet.Packet.json == json
         client.Client(json='foo')
         assert packet.Packet.json == 'foo'
-        assert engineio_packet.Packet.json == 'foo'
+        assert engineio_v3_packet.Packet.json == 'foo'
         packet.Packet.json = json
 
     def test_logger(self):
@@ -84,10 +84,10 @@ class TestClient(unittest.TestCase):
         c = client.Client(logger=my_logger)
         assert c.logger == my_logger
 
-    @mock.patch('socketio.client.Client._engineio_client_class')
-    def test_engineio_logger(self, engineio_client_class):
-        client.Client(engineio_logger='foo')
-        engineio_client_class().assert_called_once_with(logger='foo')
+    @mock.patch('socketio_v4.client.Client._engineio_v3_client_class')
+    def test_engineio_v3_logger(self, engineio_v3_client_class):
+        client.Client(engineio_v3_logger='foo')
+        engineio_v3_client_class().assert_called_once_with(logger='foo')
 
     def test_on_event(self):
         c = client.Client()
@@ -167,19 +167,19 @@ class TestClient(unittest.TestCase):
             headers='headers',
             transports='transports',
             namespaces=['/foo', '/', '/bar'],
-            socketio_path='path',
+            socketio_v4_path='path',
         )
         assert c.connection_url == 'url'
         assert c.connection_headers == 'headers'
         assert c.connection_transports == 'transports'
         assert c.connection_namespaces == ['/foo', '/', '/bar']
-        assert c.socketio_path == 'path'
+        assert c.socketio_v4_path == 'path'
         assert c.namespaces == ['/foo', '/bar']
         c.eio.connect.assert_called_once_with(
             'url',
             headers='headers',
             transports='transports',
-            engineio_path='path',
+            engineio_v3_path='path',
         )
 
     def test_connect_one_namespace(self):
@@ -190,19 +190,19 @@ class TestClient(unittest.TestCase):
             headers='headers',
             transports='transports',
             namespaces='/foo',
-            socketio_path='path',
+            socketio_v4_path='path',
         )
         assert c.connection_url == 'url'
         assert c.connection_headers == 'headers'
         assert c.connection_transports == 'transports'
         assert c.connection_namespaces == ['/foo']
-        assert c.socketio_path == 'path'
+        assert c.socketio_v4_path == 'path'
         assert c.namespaces == ['/foo']
         c.eio.connect.assert_called_once_with(
             'url',
             headers='headers',
             transports='transports',
-            engineio_path='path',
+            engineio_v3_path='path',
         )
 
     def test_connect_default_namespaces(self):
@@ -214,25 +214,25 @@ class TestClient(unittest.TestCase):
             'url',
             headers='headers',
             transports='transports',
-            socketio_path='path',
+            socketio_v4_path='path',
         )
         assert c.connection_url == 'url'
         assert c.connection_headers == 'headers'
         assert c.connection_transports == 'transports'
         assert c.connection_namespaces is None
-        assert c.socketio_path == 'path'
+        assert c.socketio_v4_path == 'path'
         assert c.namespaces == ['/foo']
         c.eio.connect.assert_called_once_with(
             'url',
             headers='headers',
             transports='transports',
-            engineio_path='path',
+            engineio_v3_path='path',
         )
 
     def test_connect_error(self):
         c = client.Client()
         c.eio.connect = mock.MagicMock(
-            side_effect=engineio_exceptions.ConnectionError('foo')
+            side_effect=engineio_v3_exceptions.ConnectionError('foo')
         )
         c.on('foo', mock.MagicMock(), namespace='/foo')
         c.on('bar', mock.MagicMock(), namespace='/')
@@ -241,7 +241,7 @@ class TestClient(unittest.TestCase):
                 'url',
                 headers='headers',
                 transports='transports',
-                socketio_path='path',
+                socketio_v4_path='path',
             )
 
     def test_wait_no_reconnect(self):
@@ -861,7 +861,7 @@ class TestClient(unittest.TestCase):
         c._trigger_event('foo', '/bar', 1, '2')
         assert result == []
 
-    @mock.patch('socketio.client.random.random', side_effect=[1, 0, 0.5])
+    @mock.patch('socketio_v4.client.random.random', side_effect=[1, 0, 0.5])
     def test_handle_reconnect(self, random):
         c = client.Client()
         c._reconnect_task = 'foo'
@@ -878,7 +878,7 @@ class TestClient(unittest.TestCase):
         ]
         assert c._reconnect_task is None
 
-    @mock.patch('socketio.client.random.random', side_effect=[1, 0, 0.5])
+    @mock.patch('socketio_v4.client.random.random', side_effect=[1, 0, 0.5])
     def test_handle_reconnect_max_delay(self, random):
         c = client.Client(reconnection_delay_max=3)
         c._reconnect_task = 'foo'
@@ -895,7 +895,7 @@ class TestClient(unittest.TestCase):
         ]
         assert c._reconnect_task is None
 
-    @mock.patch('socketio.client.random.random', side_effect=[1, 0, 0.5])
+    @mock.patch('socketio_v4.client.random.random', side_effect=[1, 0, 0.5])
     def test_handle_reconnect_max_attempts(self, random):
         c = client.Client(reconnection_attempts=2)
         c._reconnect_task = 'foo'
@@ -911,7 +911,7 @@ class TestClient(unittest.TestCase):
         ]
         assert c._reconnect_task == 'foo'
 
-    @mock.patch('socketio.client.random.random', side_effect=[1, 0, 0.5])
+    @mock.patch('socketio_v4.client.random.random', side_effect=[1, 0, 0.5])
     def test_handle_reconnect_aborted(self, random):
         c = client.Client()
         c._reconnect_task = 'foo'

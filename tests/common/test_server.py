@@ -9,14 +9,14 @@ if six.PY3:
 else:
     import mock
 
-from socketio import exceptions
-from socketio import namespace
-from socketio import packet
-from socketio import server
+from socketio_v4 import exceptions
+from socketio_v4 import namespace
+from socketio_v4 import packet
+from socketio_v4 import server
 import pytest
 
 
-@mock.patch('engineio.Server')
+@mock.patch('engineio_v3.Server')
 class TestServer(unittest.TestCase):
     def tearDown(self):
         # restore JSON encoder, in case a test changed it
@@ -764,8 +764,8 @@ class TestServer(unittest.TestCase):
         s = server.Server(logger='foo')
         assert s.logger == 'foo'
 
-    def test_engineio_logger(self, eio):
-        server.Server(engineio_logger='foo')
+    def test_engineio_v3_logger(self, eio):
+        server.Server(engineio_v3_logger='foo')
         eio.assert_called_once_with(
             **{'logger': 'foo', 'async_handlers': False}
         )

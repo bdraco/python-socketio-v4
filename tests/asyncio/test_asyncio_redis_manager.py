@@ -1,7 +1,7 @@
 import sys
 import unittest
 
-from socketio import asyncio_redis_manager
+from socketio_v4 import asyncio_redis_manager
 import pytest
 
 

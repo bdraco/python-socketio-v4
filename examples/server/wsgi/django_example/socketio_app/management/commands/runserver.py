@@ -1,6 +1,6 @@
 from django.core.management.commands.runserver import Command as RunCommand
 
-from socketio_app.views import sio
+from socketio_v4_app.views import sio
 
 
 class Command(RunCommand):

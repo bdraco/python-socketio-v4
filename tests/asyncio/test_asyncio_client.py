@@ -10,11 +10,11 @@ if six.PY3:
 else:
     import mock
 
-from socketio import asyncio_client
-from socketio import asyncio_namespace
-from engineio import exceptions as engineio_exceptions
-from socketio import exceptions
-from socketio import packet
+from socketio_v4 import asyncio_client
+from socketio_v4 import asyncio_namespace
+from engineio_v3 import exceptions as engineio_v3_exceptions
+from socketio_v4 import exceptions
+from socketio_v4 import packet
 import pytest
 
 
@@ -62,20 +62,20 @@ class TestAsyncClient(unittest.TestCase):
                 headers='headers',
                 transports='transports',
                 namespaces=['/foo', '/', '/bar'],
-                socketio_path='path',
+                socketio_v4_path='path',
             )
         )
         assert c.connection_url == 'url'
         assert c.connection_headers == 'headers'
         assert c.connection_transports == 'transports'
         assert c.connection_namespaces == ['/foo', '/', '/bar']
-        assert c.socketio_path == 'path'
+        assert c.socketio_v4_path == 'path'
         assert c.namespaces == ['/foo', '/bar']
         c.eio.connect.mock.assert_called_once_with(
             'url',
             headers='headers',
             transports='transports',
-            engineio_path='path',
+            engineio_v3_path='path',
         )
 
     def test_connect_one_namespace(self):
@@ -87,20 +87,20 @@ class TestAsyncClient(unittest.TestCase):
                 headers='headers',
                 transports='transports',
                 namespaces='/foo',
-                socketio_path='path',
+                socketio_v4_path='path',
             )
         )
         assert c.connection_url == 'url'
         assert c.connection_headers == 'headers'
         assert c.connection_transports == 'transports'
         assert c.connection_namespaces == ['/foo']
-        assert c.socketio_path == 'path'
+        assert c.socketio_v4_path == 'path'
         assert c.namespaces == ['/foo']
         c.eio.connect.mock.assert_called_once_with(
             'url',
             headers='headers',
             transports='transports',
-            engineio_path='path',
+            engineio_v3_path='path',
         )
 
     def test_connect_default_namespaces(self):
@@ -113,26 +113,26 @@ class TestAsyncClient(unittest.TestCase):
                 'url',
                 headers='headers',
                 transports='transports',
-                socketio_path='path',
+                socketio_v4_path='path',
             )
         )
         assert c.connection_url == 'url'
         assert c.connection_headers == 'headers'
         assert c.connection_transports == 'transports'
         assert c.connection_namespaces is None
-        assert c.socketio_path == 'path'
+        assert c.socketio_v4_path == 'path'
         assert c.namespaces == ['/foo']
         c.eio.connect.mock.assert_called_once_with(
             'url',
             headers='headers',
             transports='transports',
-            engineio_path='path',
+            engineio_v3_path='path',
         )
 
     def test_connect_error(self):
         c = asyncio_client.AsyncClient()
         c.eio.connect = AsyncMock(
-            side_effect=engineio_exceptions.ConnectionError('foo')
+            side_effect=engineio_v3_exceptions.ConnectionError('foo')
         )
         c.on('foo', mock.MagicMock(), namespace='/foo')
         c.on('bar', mock.MagicMock(), namespace='/')
@@ -142,7 +142,7 @@ class TestAsyncClient(unittest.TestCase):
                     'url',
                     headers='headers',
                     transports='transports',
-                    socketio_path='path',
+                    socketio_v4_path='path',
                 )
             )
 
@@ -758,7 +758,7 @@ class TestAsyncClient(unittest.TestCase):
         new_callable=AsyncMock,
         side_effect=asyncio.TimeoutError,
     )
-    @mock.patch('socketio.client.random.random', side_effect=[1, 0, 0.5])
+    @mock.patch('socketio_v4.client.random.random', side_effect=[1, 0, 0.5])
     def test_handle_reconnect(self, random, wait_for):
         c = asyncio_client.AsyncClient()
         c._reconnect_task = 'foo'
@@ -779,7 +779,7 @@ class TestAsyncClient(unittest.TestCase):
         new_callable=AsyncMock,
         side_effect=asyncio.TimeoutError,
     )
-    @mock.patch('socketio.client.random.random', side_effect=[1, 0, 0.5])
+    @mock.patch('socketio_v4.client.random.random', side_effect=[1, 0, 0.5])
     def test_handle_reconnect_max_delay(self, random, wait_for):
         c = asyncio_client.AsyncClient(reconnection_delay_max=3)
         c._reconnect_task = 'foo'
@@ -800,7 +800,7 @@ class TestAsyncClient(unittest.TestCase):
         new_callable=AsyncMock,
         side_effect=asyncio.TimeoutError,
     )
-    @mock.patch('socketio.client.random.random', side_effect=[1, 0, 0.5])
+    @mock.patch('socketio_v4.client.random.random', side_effect=[1, 0, 0.5])
     def test_handle_reconnect_max_attempts(self, random, wait_for):
         c = asyncio_client.AsyncClient(reconnection_attempts=2)
         c._reconnect_task = 'foo'
@@ -820,7 +820,7 @@ class TestAsyncClient(unittest.TestCase):
         new_callable=AsyncMock,
         side_effect=[asyncio.TimeoutError, None],
     )
-    @mock.patch('socketio.client.random.random', side_effect=[1, 0, 0.5])
+    @mock.patch('socketio_v4.client.random.random', side_effect=[1, 0, 0.5])
     def test_handle_reconnect_aborted(self, random, wait_for):
         c = asyncio_client.AsyncClient()
         c._reconnect_task = 'foo'

@@ -1,7 +1,7 @@
 import time
-import socketio
+import socketio_v4
 
-sio = socketio.Client(engineio_logger=True)
+sio = socketio_v4.Client(engineio_v3_logger=True)
 start_timer = None
 
 

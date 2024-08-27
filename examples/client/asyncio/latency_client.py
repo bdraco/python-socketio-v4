@@ -1,9 +1,9 @@
 import asyncio
 import time
-import socketio
+import socketio_v4
 
 loop = asyncio.get_event_loop()
-sio = socketio.AsyncClient()
+sio = socketio_v4.AsyncClient()
 start_timer = None
 
 

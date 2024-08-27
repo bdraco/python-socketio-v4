@@ -6,10 +6,10 @@ async_mode = None
 import os
 
 from django.http import HttpResponse
-import socketio
+import socketio_v4
 
 basedir = os.path.dirname(os.path.realpath(__file__))
-sio = socketio.Server(async_mode=async_mode)
+sio = socketio_v4.Server(async_mode=async_mode)
 thread = None
 
 

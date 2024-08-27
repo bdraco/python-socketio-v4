@@ -4,7 +4,7 @@ API Reference
 .. toctree::
    :maxdepth: 3
 
-.. module:: socketio
+.. module:: socketio_v4
 
 ``Client`` class
 ----------------

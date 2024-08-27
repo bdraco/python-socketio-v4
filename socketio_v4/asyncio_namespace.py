@@ -1,6 +1,6 @@
 import asyncio
 
-from socketio import namespace
+from socketio_v4 import namespace
 
 
 class AsyncNamespace(namespace.Namespace):
@@ -45,7 +45,7 @@ class AsyncNamespace(namespace.Namespace):
                    namespace=None, callback=None):
         """Emit a custom event to one or more connected clients.
 
-        The only difference with the :func:`socketio.Server.emit` method is
+        The only difference with the :func:`socketio_v4.Server.emit` method is
         that when the ``namespace`` argument is not given the namespace
         associated with the class is used.
 
@@ -60,7 +60,7 @@ class AsyncNamespace(namespace.Namespace):
                    callback=None):
         """Send a message to one or more connected clients.
 
-        The only difference with the :func:`socketio.Server.send` method is
+        The only difference with the :func:`socketio_v4.Server.send` method is
         that when the ``namespace`` argument is not given the namespace
         associated with the class is used.
 
@@ -73,7 +73,7 @@ class AsyncNamespace(namespace.Namespace):
     async def close_room(self, room, namespace=None):
         """Close a room.
 
-        The only difference with the :func:`socketio.Server.close_room` method
+        The only difference with the :func:`socketio_v4.Server.close_room` method
         is that when the ``namespace`` argument is not given the namespace
         associated with the class is used.
 
@@ -85,7 +85,7 @@ class AsyncNamespace(namespace.Namespace):
     async def get_session(self, sid, namespace=None):
         """Return the user session for a client.
 
-        The only difference with the :func:`socketio.Server.get_session`
+        The only difference with the :func:`socketio_v4.Server.get_session`
         method is that when the ``namespace`` argument is not given the
         namespace associated with the class is used.
 
@@ -97,7 +97,7 @@ class AsyncNamespace(namespace.Namespace):
     async def save_session(self, sid, session, namespace=None):
         """Store the user session for a client.
 
-        The only difference with the :func:`socketio.Server.save_session`
+        The only difference with the :func:`socketio_v4.Server.save_session`
         method is that when the ``namespace`` argument is not given the
         namespace associated with the class is used.
 
@@ -109,7 +109,7 @@ class AsyncNamespace(namespace.Namespace):
     def session(self, sid, namespace=None):
         """Return the user session for a client with context manager syntax.
 
-        The only difference with the :func:`socketio.Server.session` method is
+        The only difference with the :func:`socketio_v4.Server.session` method is
         that when the ``namespace`` argument is not given the namespace
         associated with the class is used.
         """
@@ -118,7 +118,7 @@ class AsyncNamespace(namespace.Namespace):
     async def disconnect(self, sid, namespace=None):
         """Disconnect a client.
 
-        The only difference with the :func:`socketio.Server.disconnect` method
+        The only difference with the :func:`socketio_v4.Server.disconnect` method
         is that when the ``namespace`` argument is not given the namespace
         associated with the class is used.
 
@@ -169,7 +169,7 @@ class AsyncClientNamespace(namespace.ClientNamespace):
     async def emit(self, event, data=None, namespace=None, callback=None):
         """Emit a custom event to the server.
 
-        The only difference with the :func:`socketio.Client.emit` method is
+        The only difference with the :func:`socketio_v4.Client.emit` method is
         that when the ``namespace`` argument is not given the namespace
         associated with the class is used.
 
@@ -182,7 +182,7 @@ class AsyncClientNamespace(namespace.ClientNamespace):
     async def send(self, data, namespace=None, callback=None):
         """Send a message to the server.
 
-        The only difference with the :func:`socketio.Client.send` method is
+        The only difference with the :func:`socketio_v4.Client.send` method is
         that when the ``namespace`` argument is not given the namespace
         associated with the class is used.
 
@@ -195,7 +195,7 @@ class AsyncClientNamespace(namespace.ClientNamespace):
     async def disconnect(self):
         """Disconnect a client.
 
-        The only difference with the :func:`socketio.Client.disconnect` method
+        The only difference with the :func:`socketio_v4.Client.disconnect` method
         is that when the ``namespace`` argument is not given the namespace
         associated with the class is used.
 

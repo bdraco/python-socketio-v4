@@ -36,7 +36,7 @@ class AsyncRedisManager(AsyncPubSubManager):  # pragma: no cover
     To use a Redis backend, initialize the :class:`Server` instance as
     follows::
 
-        server = socketio.Server(client_manager=socketio.AsyncRedisManager(
+        server = socketio_v4.Server(client_manager=socketio_v4.AsyncRedisManager(
             'redis://hostname:port/0'))
 
     :param url: The connection URL for the Redis server. For a default Redis
@@ -50,7 +50,7 @@ class AsyncRedisManager(AsyncPubSubManager):  # pragma: no cover
     """
     name = 'aioredis'
 
-    def __init__(self, url='redis://localhost:6379/0', channel='socketio',
+    def __init__(self, url='redis://localhost:6379/0', channel='socketio_v4',
                  write_only=False, logger=None):
         if aioredis is None:
             raise RuntimeError('Redis package is not installed '

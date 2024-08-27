@@ -9,7 +9,7 @@ except ImportError:
 
 from .pubsub_manager import PubSubManager
 
-logger = logging.getLogger('socketio')
+logger = logging.getLogger('socketio_v4')
 
 
 class RedisManager(PubSubManager):  # pragma: no cover
@@ -24,7 +24,7 @@ class RedisManager(PubSubManager):  # pragma: no cover
     follows::
 
         url = 'redis://hostname:port/0'
-        server = socketio.Server(client_manager=socketio.RedisManager(url))
+        server = socketio_v4.Server(client_manager=socketio_v4.RedisManager(url))
 
     :param url: The connection URL for the Redis server. For a default Redis
                 store running on the same host, use ``redis://``.
@@ -38,7 +38,7 @@ class RedisManager(PubSubManager):  # pragma: no cover
     """
     name = 'redis'
 
-    def __init__(self, url='redis://localhost:6379/0', channel='socketio',
+    def __init__(self, url='redis://localhost:6379/0', channel='socketio_v4',
                  write_only=False, logger=None, redis_options=None):
         if redis is None:
             raise RuntimeError('Redis package is not installed '

@@ -2,14 +2,14 @@ import asyncio
 import logging
 import random
 
-import engineio
+import engineio_v3
 import six
 
 from . import client
 from . import exceptions
 from . import packet
 
-default_logger = logging.getLogger('socketio.client')
+default_logger = logging.getLogger('socketio_v4.client')
 
 
 class AsyncClient(client.Client):
@@ -56,17 +56,17 @@ class AsyncClient(client.Client):
                        skip SSL certificate verification, allowing
                        connections to servers with self signed certificates.
                        The default is ``True``.
-    :param engineio_logger: To enable Engine.IO logging set to ``True`` or pass
+    :param engineio_v3_logger: To enable Engine.IO logging set to ``True`` or pass
                             a logger object to use. To disable logging set to
                             ``False``. The default is ``False``. Note that
                             fatal errors are logged even when
-                            ``engineio_logger`` is ``False``.
+                            ``engineio_v3_logger`` is ``False``.
     """
     def is_asyncio_based(self):
         return True
 
     async def connect(self, url, headers={}, transports=None,
-                      namespaces=None, socketio_path='socket.io'):
+                      namespaces=None, socketio_v4_path='socket.io'):
         """Connect to a Socket.IO server.
 
         :param url: The URL of the Socket.IO server. It can include custom
@@ -81,7 +81,7 @@ class AsyncClient(client.Client):
                            addition to the default namespace. If not given,
                            the namespace list is obtained from the registered
                            event handlers.
-        :param socketio_path: The endpoint where the Socket.IO server is
+        :param socketio_v4_path: The endpoint where the Socket.IO server is
                               installed. The default value is appropriate for
                               most cases.
 
@@ -89,14 +89,14 @@ class AsyncClient(client.Client):
 
         Example usage::
 
-            sio = socketio.AsyncClient()
+            sio = socketio_v4.AsyncClient()
             sio.connect('http://localhost:5000')
         """
         self.connection_url = url
         self.connection_headers = headers
         self.connection_transports = transports
         self.connection_namespaces = namespaces
-        self.socketio_path = socketio_path
+        self.socketio_v4_path = socketio_v4_path
 
         if namespaces is None:
             namespaces = set(self.handlers.keys()).union(
@@ -108,8 +108,8 @@ class AsyncClient(client.Client):
         try:
             await self.eio.connect(url, headers=headers,
                                    transports=transports,
-                                   engineio_path=socketio_path)
-        except engineio.exceptions.ConnectionError as exc:
+                                   engineio_v3_path=socketio_v4_path)
+        except engineio_v3.exceptions.ConnectionError as exc:
             await self._trigger_event(
                 'connect_error', '/',
                 exc.args[1] if len(exc.args) > 1 else exc.args[0])
@@ -426,7 +426,7 @@ class AsyncClient(client.Client):
                                    headers=self.connection_headers,
                                    transports=self.connection_transports,
                                    namespaces=self.connection_namespaces,
-                                   socketio_path=self.socketio_path)
+                                   socketio_v4_path=self.socketio_v4_path)
             except (exceptions.ConnectionError, ValueError):
                 pass
             else:
@@ -490,5 +490,5 @@ class AsyncClient(client.Client):
             self._reconnect_task = self.start_background_task(
                 self._handle_reconnect)
 
-    def _engineio_client_class(self):
-        return engineio.AsyncClient
+    def _engineio_v3_client_class(self):
+        return engineio_v3.AsyncClient

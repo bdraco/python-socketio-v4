@@ -3,9 +3,9 @@ The Socket.IO Client
 
 This package contains two Socket.IO clients:
 
-- The :func:`socketio.Client` class creates a client compatible with the
+- The :func:`socketio_v4.Client` class creates a client compatible with the
   standard Python library.
-- The :func:`socketio.AsyncClient` class creates a client compatible with
+- The :func:`socketio_v4.AsyncClient` class creates a client compatible with
   the ``asyncio`` package.
 
 The methods in the two clients are the same, with the only difference that in
@@ -17,11 +17,11 @@ Installation
 To install the standard Python client along with its dependencies, use the
 following command::
 
-    pip install "python-socketio[client]"
+    pip install "python-socketio_v4[client]"
 
 If instead you plan on using the ``asyncio`` client, then use this::
 
-    pip install "python-socketio[asyncio_client]"
+    pip install "python-socketio_v4[asyncio_client]"
 
 Creating a Client Instance
 --------------------------
@@ -29,13 +29,13 @@ Creating a Client Instance
 To instantiate an Socket.IO client, simply create an instance of the
 appropriate client class::
 
-    import socketio
+    import socketio_v4
 
     # standard Python
-    sio = socketio.Client()
+    sio = socketio_v4.Client()
 
     # asyncio
-    sio = socketio.AsyncClient()
+    sio = socketio_v4.AsyncClient()
 
 Defining Event Handlers
 -----------------------
@@ -43,7 +43,7 @@ Defining Event Handlers
 The Socket.IO protocol is event based. When a server wants to communicate with
 a client it *emits* an event. Each event has a name, and a list of
 arguments. The client registers event handler functions with the
-:func:`socketio.Client.event` or :func:`socketio.Client.on` decorators::
+:func:`socketio_v4.Client.event` or :func:`socketio_v4.Client.on` decorators::
 
     @sio.event
     def message(data):
@@ -145,7 +145,7 @@ the desired values from the handler function::
         return "OK", 123
 
 Likewise, the client can request a callback function to be invoked after the
-server has processed an event. The :func:`socketio.Server.emit` method has an
+server has processed an event. The :func:`socketio_v4.Server.emit` method has an
 optional ``callback`` argument that can be set to a callable. If this
 argument is given, the callable will be invoked after the server has processed
 the event, and any values returned by the server handler will be passed as
@@ -188,9 +188,9 @@ Class-Based Namespaces
 
 As an alternative to the decorator-based event handlers, the event handlers
 that belong to a namespace can be created as methods of a subclass of 
-:class:`socketio.ClientNamespace`::
+:class:`socketio_v4.ClientNamespace`::
 
-    class MyCustomNamespace(socketio.ClientNamespace):
+    class MyCustomNamespace(socketio_v4.ClientNamespace):
         def on_connect(self):
             pass
 
@@ -203,10 +203,10 @@ that belong to a namespace can be created as methods of a subclass of
     sio.register_namespace(MyCustomNamespace('/chat'))
 
 For asyncio based servers, namespaces must inherit from
-:class:`socketio.AsyncClientNamespace`, and can define event handlers as
+:class:`socketio_v4.AsyncClientNamespace`, and can define event handlers as
 coroutines if desired::
 
-    class MyCustomNamespace(socketio.AsyncClientNamespace):
+    class MyCustomNamespace(socketio_v4.AsyncClientNamespace):
         def on_connect(self):
             pass
 
@@ -227,7 +227,7 @@ class-based namespaces must use characters that are legal in method names.
 
 As a convenience to methods defined in a class-based namespace, the namespace
 instance includes versions of several of the methods in the 
-:class:`socketio.Client` and :class:`socketio.AsyncClient` classes that
+:class:`socketio_v4.Client` and :class:`socketio_v4.AsyncClient` classes that
 default to the proper namespace when the ``namespace`` argument is not given.
 
 In the case that an event has a handler in a class-based namespace, and also a
@@ -306,16 +306,16 @@ Debugging and Troubleshooting
 To help you debug issues, the client can be configured to output logs to the
 terminal::
 
-    import socketio
+    import socketio_v4
 
     # standard Python
-    sio = socketio.Client(logger=True, engineio_logger=True)
+    sio = socketio_v4.Client(logger=True, engineio_v3_logger=True)
 
     # asyncio
-    sio = socketio.AsyncClient(logger=True, engineio_logger=True)
+    sio = socketio_v4.AsyncClient(logger=True, engineio_v3_logger=True)
 
 The ``logger`` argument controls logging related to the Socket.IO protocol,
-while ``engineio_logger`` controls logs that originate in the low-level
+while ``engineio_v3_logger`` controls logs that originate in the low-level
 Engine.IO transport. These arguments can be set to ``True`` to output logs to
 ``stderr``, or to an object compatible with Python's ``logging`` package
 where the logs should be emitted to. A value of ``False`` disables logging.

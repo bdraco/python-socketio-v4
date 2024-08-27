@@ -8,7 +8,7 @@ except ImportError:
 
 from .pubsub_manager import PubSubManager
 
-logger = logging.getLogger('socketio')
+logger = logging.getLogger('socketio_v4')
 
 
 class KafkaManager(PubSubManager):  # pragma: no cover
@@ -21,7 +21,7 @@ class KafkaManager(PubSubManager):  # pragma: no cover
     follows::
 
         url = 'kafka://hostname:port'
-        server = socketio.Server(client_manager=socketio.KafkaManager(url))
+        server = socketio_v4.Server(client_manager=socketio_v4.KafkaManager(url))
 
     :param url: The connection URL for the Kafka server. For a default Kafka
                 store running on the same host, use ``kafka://``.
@@ -34,7 +34,7 @@ class KafkaManager(PubSubManager):  # pragma: no cover
     """
     name = 'kafka'
 
-    def __init__(self, url='kafka://localhost:9092', channel='socketio',
+    def __init__(self, url='kafka://localhost:9092', channel='socketio_v4',
                  write_only=False):
         if kafka is None:
             raise RuntimeError('kafka-python package is not installed '

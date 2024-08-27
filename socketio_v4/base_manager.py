@@ -3,7 +3,7 @@ import logging
 
 import six
 
-default_logger = logging.getLogger('socketio')
+default_logger = logging.getLogger('socketio_v4')
 
 
 class BaseManager(object):

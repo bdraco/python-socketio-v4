@@ -7,7 +7,7 @@ if six.PY3:
 else:
     import mock
 
-from socketio import base_manager
+from socketio_v4 import base_manager
 
 
 class TestBaseManager(unittest.TestCase):

@@ -7,7 +7,7 @@ if six.PY3:
 else:
     import mock
 
-from socketio import middleware
+from socketio_v4 import middleware
 
 
 class TestMiddleware(unittest.TestCase):

@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'socketio_app',
+    'socketio_v4_app',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

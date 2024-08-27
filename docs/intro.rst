@@ -1,4 +1,4 @@
-.. socketio documentation master file, created by
+.. socketio_v4 documentation master file, created by
    sphinx-quickstart on Sat Jun 13 23:41:23 2015.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
@@ -22,9 +22,9 @@ The example that follows shows a simple Python client:
 
 .. code:: python
 
-    import socketio
+    import socketio_v4
 
-    sio = socketio.Client()
+    sio = socketio_v4.Client()
 
     @sio.event
     def connect():
@@ -65,10 +65,10 @@ asynchronous server:
 .. code:: python
 
     import eventlet
-    import socketio
+    import socketio_v4
 
-    sio = socketio.Server()
-    app = socketio.WSGIApp(sio, static_files={
+    sio = socketio_v4.Server()
+    app = socketio_v4.WSGIApp(sio, static_files={
         '/': {'content_type': 'text/html', 'filename': 'index.html'}
     })
 
@@ -93,9 +93,9 @@ Uvicorn web server:
 .. code:: python
 
     from aiohttp import web
-    import socketio
+    import socketio_v4
 
-    sio = socketio.AsyncServer()
+    sio = socketio_v4.AsyncServer()
     app = web.Application()
     sio.attach(app)
 

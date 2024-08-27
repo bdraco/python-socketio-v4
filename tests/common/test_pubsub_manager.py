@@ -9,8 +9,8 @@ if six.PY3:
 else:
     import mock
 
-from socketio import base_manager
-from socketio import pubsub_manager
+from socketio_v4 import base_manager
+from socketio_v4 import pubsub_manager
 import pytest
 
 
@@ -24,7 +24,7 @@ class TestBaseManager(unittest.TestCase):
         self.pm.initialize()
 
     def test_default_init(self):
-        assert self.pm.channel == 'socketio'
+        assert self.pm.channel == 'socketio_v4'
         self.pm.server.start_background_task.assert_called_once_with(
             self.pm._thread
         )
@@ -39,22 +39,22 @@ class TestBaseManager(unittest.TestCase):
         pm = pubsub_manager.PubSubManager(write_only=True)
         pm.set_server(mock_server)
         pm.initialize()
-        assert pm.channel == 'socketio'
+        assert pm.channel == 'socketio_v4'
         assert len(pm.host_id) == 32
         assert pm.server.start_background_task.call_count == 0
 
     def test_write_only_default_logger(self):
         pm = pubsub_manager.PubSubManager(write_only=True)
         pm.initialize()
-        assert pm.channel == 'socketio'
+        assert pm.channel == 'socketio_v4'
         assert len(pm.host_id) == 32
-        assert pm._get_logger() == logging.getLogger('socketio')
+        assert pm._get_logger() == logging.getLogger('socketio_v4')
 
     def test_write_only_with_provided_logger(self):
         test_logger = logging.getLogger('new_logger')
         pm = pubsub_manager.PubSubManager(write_only=True, logger=test_logger)
         pm.initialize()
-        assert pm.channel == 'socketio'
+        assert pm.channel == 'socketio_v4'
         assert len(pm.host_id) == 32
         assert pm._get_logger() == test_logger
 

@@ -1,7 +1,7 @@
 import asyncio
 import pickle
 
-from socketio.asyncio_pubsub_manager import AsyncPubSubManager
+from socketio_v4.asyncio_pubsub_manager import AsyncPubSubManager
 
 try:
     import aio_pika
@@ -20,7 +20,7 @@ class AsyncAioPikaManager(AsyncPubSubManager):  # pragma: no cover
     follows::
 
         url = 'amqp://user:password@hostname:port//'
-        server = socketio.Server(client_manager=socketio.AsyncAioPikaManager(
+        server = socketio_v4.Server(client_manager=socketio_v4.AsyncAioPikaManager(
             url))
 
     :param url: The connection URL for the backend messaging queue. Example
@@ -38,7 +38,7 @@ class AsyncAioPikaManager(AsyncPubSubManager):  # pragma: no cover
     name = 'asyncaiopika'
 
     def __init__(self, url='amqp://guest:guest@localhost:5672//',
-                 channel='socketio', write_only=False, logger=None):
+                 channel='socketio_v4', write_only=False, logger=None):
         if aio_pika is None:
             raise RuntimeError('aio_pika package is not installed '
                                '(Run "pip install aio_pika" in your '

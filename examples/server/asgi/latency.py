@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 import uvicorn
 
-import socketio
+import socketio_v4
 
-sio = socketio.AsyncServer(async_mode='asgi')
-app = socketio.ASGIApp(sio, static_files={
+sio = socketio_v4.AsyncServer(async_mode='asgi')
+app = socketio_v4.ASGIApp(sio, static_files={
     '/': 'latency.html',
     '/static': 'static',
 })

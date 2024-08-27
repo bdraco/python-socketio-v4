@@ -1,6 +1,6 @@
 import logging
 
-import engineio
+import engineio_v3
 import six
 
 from . import base_manager
@@ -8,7 +8,7 @@ from . import exceptions
 from . import namespace
 from . import packet
 
-default_logger = logging.getLogger('socketio.server')
+default_logger = logging.getLogger('socketio_v4.server')
 
 
 class Server(object):
@@ -91,24 +91,24 @@ class Server(object):
                             inactive clients are closed. Set to ``False`` to
                             disable the monitoring task (not recommended). The
                             default is ``True``.
-    :param engineio_logger: To enable Engine.IO logging set to ``True`` or pass
+    :param engineio_v3_logger: To enable Engine.IO logging set to ``True`` or pass
                             a logger object to use. To disable logging set to
                             ``False``. The default is ``False``. Note that
                             fatal errors are logged even when
-                            ``engineio_logger`` is ``False``.
+                            ``engineio_v3_logger`` is ``False``.
     """
     def __init__(self, client_manager=None, logger=False, binary=False,
                  json=None, async_handlers=True, always_connect=False,
                  **kwargs):
-        engineio_options = kwargs
-        engineio_logger = engineio_options.pop('engineio_logger', None)
-        if engineio_logger is not None:
-            engineio_options['logger'] = engineio_logger
+        engineio_v3_options = kwargs
+        engineio_v3_logger = engineio_v3_options.pop('engineio_v3_logger', None)
+        if engineio_v3_logger is not None:
+            engineio_v3_options['logger'] = engineio_v3_logger
         if json is not None:
             packet.Packet.json = json
-            engineio_options['json'] = json
-        engineio_options['async_handlers'] = False
-        self.eio = self._engineio_server_class()(**engineio_options)
+            engineio_v3_options['json'] = json
+        engineio_v3_options['async_handlers'] = False
+        self.eio = self._engineio_v3_server_class()(**engineio_v3_options)
         self.eio.on('connect', self._handle_eio_connect)
         self.eio.on('message', self._handle_eio_message)
         self.eio.on('disconnect', self._handle_eio_disconnect)
@@ -760,5 +760,5 @@ class Server(object):
         if sid in self.environ:
             del self.environ[sid]
 
-    def _engineio_server_class(self):
-        return engineio.Server
+    def _engineio_v3_server_class(self):
+        return engineio_v3.Server

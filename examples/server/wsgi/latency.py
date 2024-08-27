@@ -4,11 +4,11 @@
 async_mode = None
 
 from flask import Flask, render_template
-import socketio
+import socketio_v4
 
-sio = socketio.Server(async_mode=async_mode)
+sio = socketio_v4.Server(async_mode=async_mode)
 app = Flask(__name__)
-app.wsgi_app = socketio.WSGIApp(sio, app.wsgi_app)
+app.wsgi_app = socketio_v4.WSGIApp(sio, app.wsgi_app)
 
 
 @app.route('/')

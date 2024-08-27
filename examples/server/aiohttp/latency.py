@@ -1,8 +1,8 @@
 from aiohttp import web
 
-import socketio
+import socketio_v4
 
-sio = socketio.AsyncServer(async_mode='aiohttp')
+sio = socketio_v4.AsyncServer(async_mode='aiohttp')
 app = web.Application()
 sio.attach(app)
 
